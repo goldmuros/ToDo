@@ -10,7 +10,7 @@
       <template slot-scope="scope">
         <el-checkbox
           v-model="scope.row.completed"
-          @change="edit(scope.row.id, scope.completed)"
+          @change="edit(scope.row.id, scope.row.completed)"
         ></el-checkbox>
       </template>
     </el-table-column>
