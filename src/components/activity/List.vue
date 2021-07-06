@@ -9,8 +9,8 @@
     <el-table-column property="completed" width="55"> 
       <template slot-scope="scope">
         <el-checkbox
-          v-model="scope.completed"
-          @change="edit(scope.$index, scope.completed)"
+          v-model="scope.row.completed"
+          @change="edit(scope.row.id, scope.completed)"
         ></el-checkbox>
       </template>
     </el-table-column>
@@ -20,7 +20,7 @@
         <el-button
           size="mini"
           type="danger"
-          @click="removeActivity(scope.row.name)"
+          @click="removeActivity(scope.row.id)"
         >
           Delete
         </el-button>
@@ -38,10 +38,10 @@ export default {
   },
   methods: {
     ...mapActions(["removeActivity", "editActivity"]),
-    edit(index, check) {
+    edit(id, check) {
       const payload = {
-        index,
-        check
+        id,
+        completed: check
       };
       this.editActivity(payload);
     },

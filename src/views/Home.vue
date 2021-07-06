@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import Add from '../components/activity/Add.vue';
 import List from '../components/activity/List.vue';
 
@@ -23,5 +24,11 @@ export default {
     Add,
     List
   },
+  methods: {
+    ...mapActions(['fetchActivities']),
+  },
+  created() {
+    this.fetchActivities();
+  }
 };
 </script>

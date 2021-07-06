@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import {add, fetch, remove, edit} from '../services/activities';
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -11,28 +13,40 @@ export default new Vuex.Store({
     activityList: state => state.list_activity
   },
   mutations: {
-    'ADD_ACTIVITY'(state, payload) {
-      state.list_activity.push({
-        'name': payload,
-        'completed': false
-      })
+    'FETCH_ACTIVITIES'(state, activities) {
+      state.list_activity = activities;
     },
-    'REMOVE_ACTIVITY'(state, payload) {
-      state.list_activity = state.list_activity.filter(activity => activity.name !== payload)
+    'ADD_ACTIVITY'(state, activity) {
+      state.list_activity.push(activity)
+    },
+    'REMOVE_ACTIVITY'(state, id) {
+
+      state.list_activity = state.list_activity.filter(activity => activity.id !== id)
     },
     'EDIT_ACTIVITY'(state, payload) {
-      state.list_activity[payload.index].completed = payload.check;
+      state.list_activity = state.list_activity.map(activity => {
+        if (activity.id === payload.id)
+          activity.completed = payload.completed;
+
+        return activity;
+      })
     }
   },
   actions: {
-    addActivity({commit}, payload) {
-      // TODO call service add list and firebase
-      commit('ADD_ACTIVITY', payload)
+    async fetchActivities({commit}) {
+      const activities = await fetch();
+      commit('FETCH_ACTIVITIES', activities);
     },
-    removeActivity({commit}, name) {
-      commit('REMOVE_ACTIVITY', name)
+    async addActivity({commit}, payload) {
+      const newActivity = await add(payload);
+      commit('ADD_ACTIVITY', newActivity)
     },
-    editActivity({commit}, payload) {
+    async removeActivity({commit}, id) {
+      await remove(id);
+      commit('REMOVE_ACTIVITY', id)
+    },
+    async editActivity({commit}, payload) {
+      await edit(payload)
       commit('EDIT_ACTIVITY', payload)
     }
   },
