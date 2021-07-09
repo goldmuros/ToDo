@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="12" :offset="6">
+  <el-row type="flex" justify="center" :gutter="20">
+    <el-col :span="12">
       <el-card class="box-card">
         <div slot="header">
           <Add />

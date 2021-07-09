@@ -3,18 +3,23 @@
     ref="multipleTable"
     :data="activities"
     style="width: 100%"
-    :show-header="false"
+    :show-header="true"
     :empty-text="'No Items'"
+    @selection-change="edit"
   >
-    <el-table-column property="completed" width="55"> 
+    <el-table-column property="completed" width="40">
       <template slot-scope="scope">
         <el-checkbox
           v-model="scope.row.completed"
           @change="edit(scope.row.id, scope.row.completed)"
-        ></el-checkbox>
+        />
       </template>
     </el-table-column>
-    <el-table-column property="name" width="120"> </el-table-column>
+    <el-table-column
+      property="name"
+      label="Name"
+      sortable
+    ></el-table-column>
     <el-table-column align="right">
       <template slot-scope="scope">
         <el-button
@@ -22,7 +27,7 @@
           type="danger"
           @click="removeActivity(scope.row.id)"
         >
-          Delete
+          X
         </el-button>
       </template>
     </el-table-column>
@@ -33,6 +38,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+  name: "List",
   computed: {
     ...mapGetters({ activities: "activityList" }),
   },
@@ -41,7 +47,7 @@ export default {
     edit(id, check) {
       const payload = {
         id,
-        completed: check
+        completed: check,
       };
       this.editActivity(payload);
     },
